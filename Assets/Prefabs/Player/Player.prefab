@@ -5440,7 +5440,19 @@ MonoBehaviour:
     m_ActionId: 65eef43e-339b-4428-8d59-2cb72732d0b4
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 4300361407981012049}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnInventoryButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 01c2044e-8918-4f81-b8a4-bf3f3a3ae63a
     m_ActionName: Player/Inventory[/Keyboard/tab]
   - m_PersistentCalls:
@@ -5477,6 +5489,7 @@ MonoBehaviour:
   minXLook: -85
   maxXLook: 85
   lookSensitivity: 0.1
+  canLook: 1
 --- !u!114 &5793599972896130807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5490,6 +5503,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 0}
+  itemData: {fileID: 0}
+  equip: {fileID: 0}
+  dropPosition: {fileID: 0}
 --- !u!1 &7575576926771824789
 GameObject:
   m_ObjectHideFlags: 0

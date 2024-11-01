@@ -11,17 +11,17 @@ public class Player : MonoBehaviour
     public Action addItem;
     public Equipment equip;
     public Transform dropPosition;
-    public PlayerCoditions condition;
+
+    public PlayerData playerData;
+    public PlayerConditions condition;
 
     private void Awake()
     {
         CharacterManager.Instance.Player = this;
         controller = GetComponent<PlayerController>();
-        condition = GetComponent<PlayerCoditions>();
+        playerData = GetComponent<PlayerData>();
+        condition = GetComponent<PlayerConditions>();
         equip = GetComponent<Equipment>();
     }
-
-
-
 
 }

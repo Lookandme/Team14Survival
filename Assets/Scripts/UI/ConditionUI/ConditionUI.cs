@@ -1,21 +1,60 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
+
+
+public enum ConditionType
+{
+    health,
+    stamina,
+    hunger,
+    thirst
+}
 
 public class ConditionUI : MonoBehaviour
 {
     [SerializeField]
-    protected UIConditionData data;
+    private PlayerConditions conditions;
 
-    protected float filledUIValue = 1.0f;
-    protected Image valueBar;
+    [SerializeField] ConditionType type;
 
-    protected virtual void Start()
+    private Image valueBar;
+
+    private float filledUIValue;
+    
+
+    private void Start()
     {
-        data = GetComponentInParent<UIConditionData>();
+        conditions = CharacterManager.Instance.Player.condition;
+        valueBar = GetComponent<Image>();
     }
 
-    protected virtual void Update()
+    private void Update()
     {
-        valueBar.fillAmount = filledUIValue;
+        SetFilledValue();
+
+        if ( valueBar != null)
+        {
+            valueBar.fillAmount = filledUIValue;
+        }
+    }
+
+    private void SetFilledValue()
+    {
+        switch (type)
+        {
+            case ConditionType.health:
+                filledUIValue = conditions.health.GetPercentage();
+                break;
+            case ConditionType.stamina:
+                filledUIValue = conditions.stamina.GetPercentage();
+                break;
+            case ConditionType.hunger:
+                filledUIValue = conditions.hunger.GetPercentage();
+                break;
+            case ConditionType.thirst:
+                filledUIValue = conditions.thirst.GetPercentage();
+                break;
+        }
     }
 }

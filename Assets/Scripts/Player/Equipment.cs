@@ -8,12 +8,12 @@ public class Equipment : MonoBehaviour
     public Transform equipParent;
 
     private PlayerController controller;
-    //private PlayerCondition condition;
+    private PlayerCoditions condition;
 
     void Start()
     {
         controller = CharacterManager.Instance.Player.controller;
-        //condition = CharacterManager.Instance.Player.condition;
+        condition = CharacterManager.Instance.Player.condition;
     }
 
     public void OnAttackInput(InputAction.CallbackContext context)

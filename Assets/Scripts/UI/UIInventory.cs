@@ -26,14 +26,14 @@ public class UIInventory : MonoBehaviour
     public GameObject dropButton;
 
     private PlayerController controller;
-    // private PlayerCondition condition;
+    private PlayerCoditions condition;
 
     private int curEquipIndex;
 
     void Start()
     {
         controller = CharacterManager.Instance.Player.controller;
-        // condition = CharacterManager.Instance.Player.condition;
+        condition = CharacterManager.Instance.Player.condition;
         dropPosition = CharacterManager.Instance.Player.dropPosition;
 
         controller.inventory += Toggle;
@@ -184,7 +184,7 @@ public class UIInventory : MonoBehaviour
         unEquipButton.SetActive(false);
         dropButton.SetActive(false);
     }
-    /*public void OnUseButton()
+    public void OnUseButton()
     {
         if (selectedItem.item.type == ItemType.Consumable)
         {
@@ -200,7 +200,7 @@ public class UIInventory : MonoBehaviour
             }
             RemoveSelctedItem();
         }
-    }*/
+    }
 
     public void OnDropButton()
     {

@@ -115,7 +115,7 @@ GameObject:
   - component: {fileID: 5641278994231397592}
   m_Layer: 6
   m_Name: MainCamera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -174,7 +174,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5292,6 +5292,7 @@ GameObject:
   - component: {fileID: 7053807219206502150}
   - component: {fileID: 4300361407981012049}
   - component: {fileID: 5793599972896130807}
+  - component: {fileID: 6914514478952518963}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -5308,7 +5309,7 @@ Transform:
   m_GameObject: {fileID: 7544673549932977452}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 490.0755, y: 16.78, z: 412.75128}
+  m_LocalPosition: {x: 488.13754, y: 16.599644, z: 414.4761}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5456,7 +5457,19 @@ MonoBehaviour:
     m_ActionId: 01c2044e-8918-4f81-b8a4-bf3f3a3ae63a
     m_ActionName: Player/Inventory[/Keyboard/tab]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6914514478952518963}
+        m_TargetAssemblyTypeName: Interaction, Assembly-CSharp
+        m_MethodName: OnInteractInput
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: cebf4f1f-bcce-4abe-8893-7b8b60adb0c0
     m_ActionName: Player/Interaction[/Keyboard/e]
   - m_PersistentCalls:
@@ -5506,6 +5519,25 @@ MonoBehaviour:
   itemData: {fileID: 0}
   equip: {fileID: 0}
   dropPosition: {fileID: 0}
+--- !u!114 &6914514478952518963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7544673549932977452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bfd568da369e924fb9f4fb3c20e6c8c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  checkRate: 0.05
+  maxCheckDistance: 3
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  curInteractGameObject: {fileID: 0}
+  promptText: {fileID: 0}
 --- !u!1 &7575576926771824789
 GameObject:
   m_ObjectHideFlags: 0

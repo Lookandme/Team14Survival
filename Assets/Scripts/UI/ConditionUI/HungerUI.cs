@@ -3,14 +3,16 @@
     protected override void Start()
     {
         base.Start();
-    }
+        
 
+    }
     protected override void Update()
     {
+        SetHungertFilled();
         base.Update();
     }
 
-    private void SetFilled()
+    private void SetHungertFilled()
     {
         filledUIValue = data.hunger.GetPercentage();
     }

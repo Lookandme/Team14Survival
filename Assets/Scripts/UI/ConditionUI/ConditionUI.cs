@@ -6,16 +6,20 @@ public class ConditionUI : MonoBehaviour
     [SerializeField]
     protected UIConditionData data;
 
-    protected float filledUIValue = 1.0f;
+    protected float filledUIValue;
     protected Image valueBar;
 
     protected virtual void Start()
     {
         data = GetComponentInParent<UIConditionData>();
+        valueBar = GetComponent<Image>();
     }
 
     protected virtual void Update()
     {
-        valueBar.fillAmount = filledUIValue;
+        if (valueBar != null)
+        {
+            valueBar.fillAmount = filledUIValue;
+        }
     }
 }

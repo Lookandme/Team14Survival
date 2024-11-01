@@ -2,16 +2,46 @@
 
 public class UIConditionData : MonoBehaviour
 {
-    private PlayerCoditions playerConditions;
-
-    public Condition health { get { return playerConditions.health; } }
-    public Condition stamina { get { return playerConditions.stamina; } }   
-    public Condition hunger { get { return playerConditions.hunger; } }
-    public Condition thirst { get { return playerConditions.thirst; } }
-
-    private void Awake()
+    private PlayerConditions playerConditions;
+    public Condition health
     {
-        //playerCoditions = CharacterManager.instance.player.playerconditions;
+        get
+        {
+            if (playerConditions == null) { playerConditions = CharacterManager.Instance.Player.condition; }
+            if (playerConditions != null) { return playerConditions.health; }
+            else { return null; }
+        }
+    }
+    public Condition stamina
+    {
+        get
+        {
+            if (playerConditions == null) { playerConditions = CharacterManager.Instance.Player.condition; }
+            if (playerConditions != null) { return playerConditions.stamina; }
+            else { return null; }
+        }
+    }
+    public Condition hunger
+    {
+        get
+        {
+            if (playerConditions == null) { playerConditions = CharacterManager.Instance.Player.condition; }
+            if (playerConditions != null) { return playerConditions.hunger; }
+            else { return null; }
+        }
+    }
+    public Condition thirst
+    {
+        get
+        {
+            if (playerConditions == null) { playerConditions = CharacterManager.Instance.Player.condition; }
+            if (playerConditions != null) { return playerConditions.thirst; }
+            else { return null; }
+        }
     }
 
+    private void Start()
+    {
+        playerConditions = CharacterManager.Instance.Player.condition;
+    }
 }

@@ -8,15 +8,11 @@ public class Condition : MonoBehaviour
     private float curValue;
     public float passiveValue;
 
-    private void Start()
-    {
-        curValue = maxValue;
-    }
-
-    public void SetValue(float valueData)
+    public void SetValue(float valueData,float passiveValueData)
     {
         maxValue= valueData;
-        curValue = maxValue; 
+        curValue = maxValue;
+        passiveValue = passiveValueData;
     }
 
     public void Add(float value)

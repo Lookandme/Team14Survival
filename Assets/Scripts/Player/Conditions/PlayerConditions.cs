@@ -1,33 +1,47 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerCoditions : MonoBehaviour
+public class PlayerConditions : MonoBehaviour
 {
-    //PlayerData playerdata
+    PlayerData playerdata;
 
     public Condition health;
     public Condition stamina;
     public Condition hunger;
     public Condition thirst;
 
+    public float starveDamage;
+    public float thirstyDamage;
+
     private void Awake()
     {
-        //playerdata = ChrarcterManager.instance.player.playerdata
-        //health.SetValue(playerdata.hp)
-        //stamina.SetValue(playerdata.st)
-        //hunger.SetValue(playerdata.hg)
-        //thirst.SetValue(playerdata.th)
+        health = gameObject.AddComponent<Condition>();
+        stamina = gameObject.AddComponent<Condition>();
+        hunger = gameObject.AddComponent<Condition>();
+        thirst = gameObject.AddComponent<Condition>();
+    }
+
+    private void Start()
+    {
+        playerdata = CharacterManager.Instance.Player.playerData;
+       
+        health.SetValue(playerdata.health.MaxValue, playerdata.health.passiveValue);
+        stamina.SetValue(playerdata.stamina.MaxValue, playerdata.stamina.passiveValue);
+        hunger.SetValue(playerdata.hunger.MaxValue, playerdata.hunger.passiveValue);
+        thirst.SetValue(playerdata.thirst.MaxValue, playerdata.thirst.passiveValue);
     }
 
     private void Update()
     {
+      
+
         hunger.Substract(hunger.passiveValue * Time.deltaTime);
         thirst.Substract(thirst.passiveValue * Time.deltaTime);
         if (thirst.GetValue() > 0.0f)
         {
             stamina.Add(stamina.passiveValue * Time.deltaTime);
         }
-
+        
         Starve();
         Thirsty();
 
@@ -35,20 +49,24 @@ public class PlayerCoditions : MonoBehaviour
         {
             Die();
         }
+        Debug.Log("health:" + health.GetValue());
+        Debug.Log("stamina:" + stamina.GetValue());
+        Debug.Log("hunger:" + hunger.GetValue());
+        Debug.Log("thirst:" + thirst.GetValue());
     }
 
     private void Starve()
     {
         if(hunger.GetValue() <= 0.0f)
         {
-            health.Substract(health.passiveValue);
+            health.Substract(starveDamage*Time.deltaTime);
         }
     }
     private void Thirsty()
     {
         if (thirst.GetValue() <= 0.0f)
         {
-            stamina.Substract(stamina.passiveValue);
+            stamina.Substract(thirstyDamage*Time.deltaTime);
         }
     }
 

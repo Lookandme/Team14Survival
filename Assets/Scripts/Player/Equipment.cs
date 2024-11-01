@@ -8,7 +8,7 @@ public class Equipment : MonoBehaviour
     public Transform equipParent;
 
     private PlayerController controller;
-    private PlayerCoditions condition;
+    private PlayerConditions condition;
 
     void Start()
     {

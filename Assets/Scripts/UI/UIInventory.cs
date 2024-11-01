@@ -26,7 +26,7 @@ public class UIInventory : MonoBehaviour
     public GameObject dropButton;
 
     private PlayerController controller;
-    private PlayerCoditions condition;
+    private PlayerConditions condition;
 
     private int curEquipIndex;
 

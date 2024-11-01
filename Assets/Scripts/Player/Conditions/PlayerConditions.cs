@@ -35,8 +35,8 @@ public class PlayerConditions : MonoBehaviour
     {
       
 
-        hunger.Substract(hunger.passiveValue * Time.deltaTime);
-        thirst.Substract(thirst.passiveValue * Time.deltaTime);
+        hunger.Subtract(hunger.passiveValue * Time.deltaTime);
+        thirst.Subtract(thirst.passiveValue * Time.deltaTime);
         if (thirst.GetValue() > 0.0f)
         {
             stamina.Add(stamina.passiveValue * Time.deltaTime);
@@ -59,14 +59,14 @@ public class PlayerConditions : MonoBehaviour
     {
         if(hunger.GetValue() <= 0.0f)
         {
-            health.Substract(starveDamage*Time.deltaTime);
+            health.Subtract(starveDamage*Time.deltaTime);
         }
     }
     private void Thirsty()
     {
         if (thirst.GetValue() <= 0.0f)
         {
-            stamina.Substract(thirstyDamage*Time.deltaTime);
+            stamina.Subtract(thirstyDamage*Time.deltaTime);
         }
     }
 
@@ -98,7 +98,7 @@ public class PlayerConditions : MonoBehaviour
             //지침 패널티 부여 고민중
         }
 
-        stamina.Substract(value);
+        stamina.Subtract(value);
         return true;
     }
 }

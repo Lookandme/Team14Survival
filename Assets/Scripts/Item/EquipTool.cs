@@ -23,18 +23,18 @@ public class EquipTool : Equip
         animator = GetComponent<Animator>();
     }
 
-  /*  public override void OnAttackInput()
+    public override void OnAttackInput()
     {
         if (!attacking)
         {
-            if (CharacterManager.Instance.Player.condition.UseStamina(useStamina))
-            {
+            //if (CharacterManager.Instance.Player.condition.UseStamina(useStamina))
+            //{
                 attacking = true;
                 animator.SetTrigger("Attack");
                 Invoke("OnCanAttack", attackRate);
-            }
+            //}
         }
-    }*/
+    }
 
     void OnCanAttack()
     {

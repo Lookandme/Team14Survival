@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9804a01e077b4a24a94439a5ef8e679e, type: 3}
+  m_Name: Item_ChainSaw
+  m_EditorClassIdentifier: 
+  displayName: "\uC804\uAE30\uD1B1"
+  description: "\uC0B4\uC0C1\uC6A9 \uC804\uAE30\uD1B1\uC785\uB2C8\uB2E4."
+  type: 0
+  icon: {fileID: 21300000, guid: 3933b117fa8c5394683539f2230ecba3, type: 3}
+  dropPrefab: {fileID: 9147135395748023049, guid: a9e2b478fd5a36944953b2403c7b64ac, type: 3}
+  canStack: 0
+  maxStackAmount: 0
+  consumables: []
+  equipPrefab: {fileID: 0}

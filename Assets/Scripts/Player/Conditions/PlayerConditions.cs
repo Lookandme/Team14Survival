@@ -1,7 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerConditions : MonoBehaviour
+public interface IDamagable //데미지를 받는 물체의 인터페이스
+{
+     void GetDamage(float damage);
+}
+public class PlayerConditions : MonoBehaviour , IDamagable
 {
     PlayerData playerdata;
 
@@ -12,6 +17,8 @@ public class PlayerConditions : MonoBehaviour
 
     public float starveDamage;
     public float thirstyDamage;
+
+    public event Action PlayerOnAttack;
 
     private void Awake()
     {
@@ -100,5 +107,11 @@ public class PlayerConditions : MonoBehaviour
 
         stamina.Subtract(value);
         return true;
+    }
+
+    public void GetDamage(float damage)
+    {
+        health.Subtract(damage);
+        PlayerOnAttack?.Invoke(); //피격 시 구독중인 메서드 호출
     }
 }

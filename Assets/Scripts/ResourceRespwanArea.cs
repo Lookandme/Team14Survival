@@ -19,7 +19,8 @@ public class ResourceRespwanArea : MonoBehaviour
     public float maxZPoint;
 
     private bool inHuman = false; //collision 안에 사람이 있는지
-    public LayerMask checkGrounded;
+    public LayerMask groundLayer;
+    public float inHumanDistance;
 
     private void Awake()
     {
@@ -34,6 +35,7 @@ public class ResourceRespwanArea : MonoBehaviour
 
     private void Update()
     {
+        if (inHuman) return;
         CheckResourceSpawn();
     }
 
@@ -76,7 +78,7 @@ public class ResourceRespwanArea : MonoBehaviour
 
     private bool SpawnPointCheck(Vector3 point) //스폰 지점을 확인
     {
-        if(Physics.Raycast(point + Vector3.up, Vector3.down, out RaycastHit inHit, checkGrounded))//Ground 레이어가 있는지 확인
+        if(Physics.Raycast(point + Vector3.up, Vector3.down, out RaycastHit inHit, groundLayer))//Ground 레이어가 있는지 확인
         { 
             return true;
         } 
@@ -84,19 +86,33 @@ public class ResourceRespwanArea : MonoBehaviour
     }
 
   
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionStay(Collision collision) //콜라이더 충돌이 지속될시 실행
     {
-        if (collision.collider.CompareTag("Player"))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, inHumanDistance); //오버랩은 콜라이더 충돌 발생시 해당 지점의 콜라이더 들을 모두 가져옴
+
+        foreach (Collider collider in colliders)
         {
-            inHuman = true; 
+            if (collider.gameObject.CompareTag("Player"))
+            {
+                inHuman = true;
+            }     
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision collision) //콜라이더가 충돌범위를 나갈시 실행 플레이어가 남아있는지 확인
     {
-        if (collision.collider.CompareTag("Player"))
+        Collider[] colliders = Physics.OverlapSphere(transform.position, inHumanDistance);
+
+        foreach(Collider collider in colliders)
         {
-            inHuman = false;
+            if (collider == null) 
+            {
+                inHuman = false;
+            }
+            else if(!collider.CompareTag("Player") )
+            {
+                inHuman = false;
+            }
         }
     }
 }

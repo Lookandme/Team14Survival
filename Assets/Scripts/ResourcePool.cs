@@ -9,12 +9,7 @@ using UnityEngine.Timeline;
 
 public class ResourcePool : MonoBehaviour
 {
-    public Dictionary<string, Queue<GameObject>> resourceDictionary;
-
-    private void Start()
-    {
-        resourceDictionary = new Dictionary<string, Queue<GameObject>>();
-    }
+    public Dictionary<string, Queue<GameObject>> resourceDictionary = new();
 
     public void SetPool(string resourceName,List<GameObject> resourceList) //팩토리에서 생성한 오브젝트들을 큐에 담아 딕셔너리에 집어넣음
     {
@@ -23,7 +18,7 @@ public class ResourcePool : MonoBehaviour
         {
             resourceQueue.Enqueue(resourceList[i]);
         }
-        resourceDictionary.Add(resourceName, resourceQueue);
+        resourceDictionary.Add(resourceName, resourceQueue);   
     }
 
     public GameObject GetResourceInPool(string resourceName)
@@ -31,6 +26,7 @@ public class ResourcePool : MonoBehaviour
         if (!resourceDictionary.ContainsKey(resourceName)) return null;
 
         GameObject obj = resourceDictionary[resourceName].Dequeue();
+        Debug.Log("반환");
         return obj;
     }
 
@@ -41,5 +37,12 @@ public class ResourcePool : MonoBehaviour
         bool isIn = resourceDictionary[name].TryDequeue(out GameObject obj);
         resourceDictionary[name].Enqueue(obj);
         return isIn;
+    }
+
+    public void GetUselessResource(string name)
+    {
+        if (!resourceDictionary.ContainsKey(name)) return;
+
+        
     }
 }

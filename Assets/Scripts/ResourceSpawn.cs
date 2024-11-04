@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ResourceRespwanArea : MonoBehaviour
+public class ResourceSpawn : MonoBehaviour
 {
-    public ResourceFactory resourceFactory;
+    public ResourceDatabase resourceFactory;
     public ResourcePool resourcePool;
 
-    private List<string> resourceName;
+    [SerializeField] private List<string> resourceName;
 
     [Header("X")]
     public float minXPoint;
@@ -21,22 +21,37 @@ public class ResourceRespwanArea : MonoBehaviour
     private bool inHuman = false; //collision 안에 사람이 있는지
     public LayerMask groundLayer;
     public float inHumanDistance;
+    public int recentlyTime; //리젠 시간 설정
+    private float curTime;
 
     private void Awake()
     {
-        resourceFactory = GetComponent<ResourceFactory>();
+        resourceFactory = GetComponent<ResourceDatabase>();
         resourcePool = GetComponent<ResourcePool>();
     }
 
     private void Start()
     {
         resourceName = resourceFactory.GetName();
+        for(int i = 0; i < resourceName.Count; i++)
+        {
+            List<GameObject> list = new List<GameObject>();
+            list =  resourceFactory.CreateResource(resourceName[i]);
+            resourcePool.SetPool(resourceName[i], list);
+        }  
     }
 
     private void Update()
     {
+        curTime += 1 * Time.deltaTime;
+        Debug.Log(curTime);
         if (inHuman) return;
-        CheckResourceSpawn();
+
+        if(recentlyTime < curTime)
+        {
+            CheckResourceSpawn();
+            curTime = 0;
+        }
     }
 
     private void CheckResourceSpawn()
@@ -47,6 +62,7 @@ public class ResourceRespwanArea : MonoBehaviour
         {
             if (resourcePool.CheckQueueEmpty(resourceName[i])) //큐의 내용물을 확인하여 Spawning 호출 true 일 때 Dequeue 가능
             {
+                Debug.Log("스폰");
                 Spawning(resourceName[i]);
             }
         }
@@ -54,6 +70,7 @@ public class ResourceRespwanArea : MonoBehaviour
     private void Spawning(string resourceName) //자원 스폰
     {
         GameObject obj = resourcePool.GetResourceInPool(resourceName);
+        Debug.Log(obj.name);
         //오브젝트 생성위치에 또다른 자원이 있을 경우 다시 재설정
         while (true)
         {

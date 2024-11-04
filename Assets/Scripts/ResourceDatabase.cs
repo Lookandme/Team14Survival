@@ -12,7 +12,7 @@ public class ResourceData
     public int poolSize;
 }
 
-public class ResourceFactory : MonoBehaviour
+public class ResourceDatabase : MonoBehaviour
 {
     public List<ResourceData> resouceList;
 

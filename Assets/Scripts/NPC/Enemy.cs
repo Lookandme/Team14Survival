@@ -38,9 +38,9 @@ public class Enemy : MonoBehaviour
 
     private float playerDistance;
 
-    public float fieldOfView = 120f;
+    
 
-    private float previousPositionX;
+  
 
 
     private NavMeshAgent agent;
@@ -55,13 +55,13 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         SetState(AIState.Wandering);
-        previousPositionX = transform.position.x; // 초기 X 위치 저장
     }
     private void Update()
     {
-        playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.transform.position);
+        playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player. transform.position);
+        Debug.Log(playerDistance);
         animator.SetBool("Moving", aiState != AIState.Idle);
-        UpdateTurningAnimation();
+        
 
 
 
@@ -111,32 +111,32 @@ public class Enemy : MonoBehaviour
         animator.speed = agent.speed / walkSpeed;
     }
 
-    private void UpdateTurningAnimation()    // 방향 전환 시점을 좀 더 명확하게 할 필요가 있음 개선 사항
-    {
-        float currentPositionX = transform.position.x;
+    //private void UpdateTurningAnimation()    // 방향 전환 시점을 좀 더 명확하게 할 필요가 있음 개선 사항
+    //{
+    //    float currentPositionX = transform.position.x;
 
-        if (currentPositionX > previousPositionX)
-        {
-            // 오른쪽으로 이동 중
-            animator.SetBool("TurningRight", true);
+    //    if (currentPositionX > previousPositionX)
+    //    {
+    //        // 오른쪽으로 이동 중
+    //        animator.SetBool("TurningRight", true);
            
-        }
-        else if (currentPositionX < previousPositionX)
-        {
-            // 왼쪽으로 이동 중
-            animator.SetBool("TurningLeft", true);
+    //    }
+    //    else if (currentPositionX < previousPositionX)
+    //    {
+    //        // 왼쪽으로 이동 중
+    //        animator.SetBool("TurningLeft", true);
            
-        }
-        else
-        {
-            // 움직이지 않을 때는 방향 모두 false로 설정
-            animator.SetBool("TurningRight", false);
-            animator.SetBool("TurningLeft", false);
-        }
+    //    }
+    //    else
+    //    {
+    //        // 움직이지 않을 때는 방향 모두 false로 설정
+    //        animator.SetBool("TurningRight", false);
+    //        animator.SetBool("TurningLeft", false);
+    //    }
 
-        // 이전 위치 업데이트
-        previousPositionX = currentPositionX;
-    }
+    //    // 이전 위치 업데이트
+    //    previousPositionX = currentPositionX;
+    //}
 
     private void PassiveUpdate()
     {
@@ -153,12 +153,31 @@ public class Enemy : MonoBehaviour
 
     }
 
-    private void AttackingUpdate()
+    void AttackingUpdate()
     {
         if (playerDistance > attackDistance)
         {
             agent.isStopped = false;
-           
+            NavMeshPath path = new NavMeshPath();
+            if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
+            {
+                agent.SetDestination(CharacterManager.Instance.Player.transform.position);
+            }
+            else
+            {
+                SetState(AIState.Fleeing);
+            }
+        }
+        else
+        {
+            agent.isStopped = true;
+            if (Time.time - lastAttackTime > attackRate)
+            {
+                lastAttackTime = Time.time;
+               // CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);  데미지 입히는 부분
+                animator.speed = 1;
+                animator.SetTrigger("Attack");
+            }
         }
     }
     private void FleeingUpdate()
@@ -171,14 +190,11 @@ public class Enemy : MonoBehaviour
         if (aiState != AIState.Idle) return;
 
         SetState(AIState.Wandering);
-        if (playerDistance > maxWanderDistance)
+        if (playerDistance > detectDistace)
         {
             agent.SetDestination(GetWanderLocation());
         }
-        else
-        {
-            agent.SetDestination(CharacterManager.Instance.transform.position);
-        }
+        
       
     }
     Vector3 GetWanderLocation()  // 평소 움직임을 갈수 있는 범위 내에서 랜덤으로 지정해주는 코드
@@ -196,5 +212,20 @@ public class Enemy : MonoBehaviour
         }
 
         return hit.position;
+    }
+
+    public void TakePhysicalDamage(int damageAmount)
+    {
+        health -= damageAmount;
+        if (health <= 0)
+            Die();
+
+
+       
+    }
+
+    private void Die()
+    {
+       Destroy(gameObject);
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3673135977634545780}
   - component: {fileID: 6834391599077188853}
   - component: {fileID: 9850164108886076}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4130541721659078585}
   - component: {fileID: 421168834126947539}
   - component: {fileID: 1182958336821615965}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Hundle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 2379977699083347775}
   - component: {fileID: 7696656739100797822}
   - component: {fileID: -236782183535357297}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Equip_Axe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1421138186441058289}
-  m_Layer: 8
+  - component: {fileID: 8609507559915072345}
+  m_Layer: 9
   m_Name: NZ Battle Axe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -264,7 +265,7 @@ Transform:
   m_GameObject: {fileID: 5673426473456583217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0.13052624, z: 0, w: 0.9914449}
-  m_LocalPosition: {x: 0.4, y: -0.43, z: 0.6}
+  m_LocalPosition: {x: 0.3, y: -0.43, z: 0.7}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -272,3 +273,24 @@ Transform:
   - {fileID: 4130541721659078585}
   m_Father: {fileID: 2379977699083347775}
   m_LocalEulerAnglesHint: {x: 0, y: -15, z: 0}
+--- !u!65 &8609507559915072345
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5673426473456583217}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.07686136, y: 0.6289473, z: 0.26561388}
+  m_Center: {x: 0.0011552474, y: 0.094935, z: 0.089153074}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8013855871155046957}
   - component: {fileID: 576369433103758917}
   - component: {fileID: -5840144306235856896}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Equip_ChainSaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   attackRate: 1.2
   attackDistance: 1
   useStamina: 10
-  doesGatherResources: 0
+  doesGatherResources: 1
   doesDealDamage: 0
   damage: 20
 --- !u!95 &-5840144306235856896
@@ -84,7 +84,8 @@ GameObject:
   - component: {fileID: 5955304150218912905}
   - component: {fileID: 8348065939586319919}
   - component: {fileID: 226372963722580115}
-  m_Layer: 8
+  - component: {fileID: 814387898399603656}
+  m_Layer: 9
   m_Name: Chainsaw
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +101,7 @@ Transform:
   m_GameObject: {fileID: 5731372370484035311}
   serializedVersion: 2
   m_LocalRotation: {x: -0.39044833, y: -0.34682897, z: -0.161729, w: 0.8373192}
-  m_LocalPosition: {x: 0.3, y: -0.2, z: 0.8}
+  m_LocalPosition: {x: 0.3, y: -0.2, z: 0.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -158,3 +159,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &814387898399603656
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5731372370484035311}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3298042, y: 0.39889583, z: 0.9425709}
+  m_Center: {x: -0.000000002888231, y: 0.05167297, z: 0.09691294}

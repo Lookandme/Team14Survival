@@ -5,8 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Timeline;
 
-
-
 public class ResourcePool : MonoBehaviour
 {
     public Dictionary<string, Queue<GameObject>> resourceDictionary = new();
@@ -25,8 +23,8 @@ public class ResourcePool : MonoBehaviour
     {
         if (!resourceDictionary.ContainsKey(resourceName)) return null;
 
+        if (resourceDictionary[resourceName] == null) return null;
         GameObject obj = resourceDictionary[resourceName].Dequeue();
-        Debug.Log("¹ÝÈ¯");
         return obj;
     }
 
@@ -35,6 +33,7 @@ public class ResourcePool : MonoBehaviour
         if (!resourceDictionary.ContainsKey(name)) return false;
 
         bool isIn = resourceDictionary[name].TryDequeue(out GameObject obj);
+        if (!isIn) return false;
         resourceDictionary[name].Enqueue(obj);
         return isIn;
     }

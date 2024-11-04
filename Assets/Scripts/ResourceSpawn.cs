@@ -86,7 +86,7 @@ public class ResourceSpawn : MonoBehaviour
 
     private Vector3 GetResourceSpawnPoint() //스폰 지점 설정 로직
     {
-        Vector3 point = new Vector3(Random.Range(minXPoint,maxXPoint),0,Random.Range(minZPoint,maxZPoint));
+        Vector3 point = new Vector3(Random.Range(minXPoint,maxXPoint),10,Random.Range(minZPoint,maxZPoint));
         return transform.position + point;
     }
 

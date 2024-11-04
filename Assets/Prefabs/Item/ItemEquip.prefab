@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2156917755987384440}
   - component: {fileID: 2917055709197289680}
   - component: {fileID: 1775384167038562271}
+  - component: {fileID: 2191650239496090832}
   m_Layer: 7
   m_Name: ItemEquip
   m_TagString: Untagged
@@ -68,6 +69,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 6de13e776c3b97a429bdfdfbe2c956d0, type: 2}
+--- !u!114 &2191650239496090832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088389735753060963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52596b00c3c5f584cb4437195e7b114c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attackRate: 0
+  attackDistance: 0
+  useStamina: 0
+  doesGatherResources: 0
+  doesDealDamage: 0
+  damage: 0
 --- !u!1 &3041472153550032343
 GameObject:
   m_ObjectHideFlags: 0

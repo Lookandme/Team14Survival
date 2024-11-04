@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public bool canLook = true;
 
     public Action inventory;
+    public Action craftManual;
     private Vector2 mouseDelta;
 
     private Rigidbody _rigidbody;
@@ -118,6 +119,7 @@ public class PlayerController : MonoBehaviour
     {
         if (callbackContext.phase == InputActionPhase.Started)
         {
+            craftManual?.Invoke();
             inventory?.Invoke();
             ToggleCursor();
         }

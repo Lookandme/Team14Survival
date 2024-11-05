@@ -1,6 +1,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,20 +10,21 @@ public enum AIState
     Idle,
     Wandering,
     Attacking,
-    Fleeing
+    Chasing,
+
 }
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamagable
 {
     [Header("Stats")]
-    public int health;
+    public float health;
     public float walkSpeed;
     public float runSpeed;
 
     [Header("AI")]
     private AIState aiState;
     public float detectDistace;
-    public float safeDistace;
+   
 
     [Header("Wandering")]
     public float minWanderDistance;
@@ -31,21 +33,20 @@ public class Enemy : MonoBehaviour
     public float maxWanderWaitTime;
 
     [Header("Combat")]
-    public int damage;
+    public float damage;
     public float attackRate;
-    private float lastAttackTime;
+    private float lastAttackTime = 0f;
     public float attackDistance;
 
     private float playerDistance;
-
-    
-
-  
-
+    private bool isAttacking = false; 
 
     private NavMeshAgent agent;
     private Animator animator;
     private SkinnedMeshRenderer[] skinnedMeshes;
+    public LayerMask targetMask;
+    PlayerConditions playerConditions;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -54,33 +55,81 @@ public class Enemy : MonoBehaviour
     }
     private void Start()
     {
-        SetState(AIState.Wandering);
+
+        StartCoroutine(nameof(StartEuemy));
+
+
     }
     private void Update()
     {
-        playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player. transform.position);
+        playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player.transform.position);
         Debug.Log(playerDistance);
-        animator.SetBool("Moving", aiState != AIState.Idle);
-        
-
-
-
-
         switch (aiState)
         {
             case AIState.Idle:
-                PassiveUpdate();
+                StartCoroutine(nameof(StartEuemy));
                 break;
             case AIState.Wandering:
-                PassiveUpdate();
+                WanderingUpdate();
+               
                 break;
             case AIState.Attacking:
                 AttackingUpdate();
                 break;
-            case AIState.Fleeing:
-                FleeingUpdate();
+            case AIState.Chasing:
+                ChasingUpdate();
+                
                 break;
+
+
+
         }
+        ChangedAnimation();
+
+    }
+
+    private IEnumerator StartEuemy()  // 처음 애너미 소환 모션 후 움직임 시작
+    {
+        if(health != 0)
+        {
+            
+            SetState(AIState.Idle);
+           
+            yield return new WaitForSeconds(6f);
+            SetState(AIState.Wandering);
+            Debug.Log("@@@");
+        }
+        else
+        {
+            animator.SetBool("Die",true);
+            
+            
+        }
+    }
+    private void ChangedAnimation()
+    {
+        if(aiState == AIState.Wandering)
+        {
+            animator.SetBool("Moving", true);
+        }
+        else animator.SetBool("Moving", false);
+
+        if (aiState != AIState.Chasing)
+        {
+            animator.SetBool("Chasing", true);
+        } 
+        else animator.SetBool("Chasing", false);
+
+        //if (aiState != AIState.Attacking)
+        //{
+        //    
+        //    agent.isStopped = false;
+        //}
+        //else
+        //{
+        //    
+        //    agent.isStopped = true;
+        //}
     }
 
 
@@ -91,119 +140,98 @@ public class Enemy : MonoBehaviour
         switch (aiState)
         {
             case AIState.Idle:
-                agent.speed = walkSpeed;
-                agent.isStopped = true;
                 break;
             case AIState.Wandering:
                 agent.speed = walkSpeed;
-                agent.isStopped = false;
                 break;
             case AIState.Attacking:
-                agent.speed = runSpeed;
-                agent.isStopped = false;
+                agent.speed = walkSpeed;
                 break;
-            case AIState.Fleeing:
+            case AIState.Chasing:
                 agent.speed = runSpeed;
-                agent.isStopped = false;
                 break;
+
+
         }
 
         animator.speed = agent.speed / walkSpeed;
     }
 
-    //private void UpdateTurningAnimation()    // 방향 전환 시점을 좀 더 명확하게 할 필요가 있음 개선 사항
-    //{
-    //    float currentPositionX = transform.position.x;
 
-    //    if (currentPositionX > previousPositionX)
-    //    {
-    //        // 오른쪽으로 이동 중
-    //        animator.SetBool("TurningRight", true);
-           
-    //    }
-    //    else if (currentPositionX < previousPositionX)
-    //    {
-    //        // 왼쪽으로 이동 중
-    //        animator.SetBool("TurningLeft", true);
-           
-    //    }
-    //    else
-    //    {
-    //        // 움직이지 않을 때는 방향 모두 false로 설정
-    //        animator.SetBool("TurningRight", false);
-    //        animator.SetBool("TurningLeft", false);
-    //    }
 
-    //    // 이전 위치 업데이트
-    //    previousPositionX = currentPositionX;
-    //}
-
-    private void PassiveUpdate()
+    private void WanderingUpdate()
     {
-        if (aiState == AIState.Wandering && agent.remainingDistance < 0.1f)
+        if (playerDistance > detectDistace && agent.remainingDistance <= 0.1f)
         {
-            SetState(AIState.Idle);
-            Invoke("WanderingLocation", Random.Range(minWanderWaitTime, maxWanderWaitTime));
+            WanderingLocation();
 
         }
         if (playerDistance < detectDistace)
         {
+            SetState(AIState.Chasing);
+
+        }
+
+    }
+    private void ChasingUpdate() // 목표물을 따라가는 로직 목표 사이거리에 따라 상태 갱신
+    {
+        animator.ResetTrigger("Attack");
+        agent.SetDestination(CharacterManager.Instance.Player.transform.position + Vector3.up);
+        Debug.Log($"destination {agent.destination}");
+
+        if (playerDistance > detectDistace)
+        {
+            SetState(AIState.Wandering);
+        }
+
+        if (playerDistance < attackDistance)
+        {
             SetState(AIState.Attacking);
+            agent.ResetPath();
+            
         }
-
     }
 
-    void AttackingUpdate()
+
+    private void AttackingUpdate() // 문제점 공격에 딜레이가 없는상태 수정 필요 !!
     {
-        if (playerDistance > attackDistance)
+       
+        if (Time.time - lastAttackTime >= attackRate)   // 공격을 수행할 수 있는지 체크
         {
-            agent.isStopped = false;
-            NavMeshPath path = new NavMeshPath();
-            if (agent.CalculatePath(CharacterManager.Instance.Player.transform.position, path))
+            agent.ResetPath();
+            animator.SetTrigger("Attack");
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, attackDistance, targetMask))
             {
-                agent.SetDestination(CharacterManager.Instance.Player.transform.position);
+                hit.collider.GetComponent<IDamagable>().GetDamage(damage);
+                
             }
-            else
-            {
-                SetState(AIState.Fleeing);
-            }
+
+            
+            lastAttackTime = Time.time;  // 마지막 공격 시간 업데이트
         }
-        else
+        if(playerDistance > attackDistance) // 공격 범위를 벗어났다면?
         {
-            agent.isStopped = true;
-            if (Time.time - lastAttackTime > attackRate)
-            {
-                lastAttackTime = Time.time;
-               // CharacterManager.Instance.Player.controller.GetComponent<IDamagable>().TakePhysicalDamage(damage);  데미지 입히는 부분
-                animator.speed = 1;
-                animator.SetTrigger("Attack");
-            }
+            SetState(AIState.Chasing);
         }
     }
-    private void FleeingUpdate()
-    {
-
-    }
-
     private void WanderingLocation()
     {
-        if (aiState != AIState.Idle) return;
-
-        SetState(AIState.Wandering);
-        if (playerDistance > detectDistace)
+        if (playerDistance > detectDistace) // 플레이어 위치가 감지 범위 밖에 있다면
         {
             agent.SetDestination(GetWanderLocation());
         }
-        
-      
+
+
     }
-    Vector3 GetWanderLocation()  // 평소 움직임을 갈수 있는 범위 내에서 랜덤으로 지정해주는 코드
+    Vector3 GetWanderLocation()  // 평소 움직임으로 갈수 있는 범위 내에서 랜덤으로 지정해주는 코드
     {
         NavMeshHit hit;
-        NavMesh.SamplePosition(transform.position + (Random.onUnitSphere * Random.Range(minWanderDistance, maxWanderDistance)), out hit, maxWanderDistance,NavMesh.AllAreas);
+        NavMesh.SamplePosition(transform.position + (Random.onUnitSphere * Random.Range(minWanderDistance, maxWanderDistance)), out hit, maxWanderDistance, NavMesh.AllAreas);
 
         int i = 0;
-        while (Vector3.Distance(transform.position, hit.position) < detectDistace)  // do while 문으로 바꿔보자
+        while (Vector3.Distance(transform.position, hit.position) < detectDistace)  // do while 문으로 바꿔보자 언젠가는...
         {
             NavMesh.SamplePosition(transform.position + (Random.onUnitSphere * Random.Range(minWanderDistance, maxWanderDistance)), out hit, maxWanderDistance, NavMesh.AllAreas);
             i++;
@@ -214,18 +242,26 @@ public class Enemy : MonoBehaviour
         return hit.position;
     }
 
-    public void TakePhysicalDamage(int damageAmount)
+    public void GetDamage(float damage) // 플레이어 한테 데미지를 주는 매서드
     {
-        health -= damageAmount;
+        animator.SetTrigger("GetDamage");
+        health -= damage;
         if (health <= 0)
             Die();
 
-
-       
     }
+
+
+    
+
 
     private void Die()
     {
-       Destroy(gameObject);
+        SetState(AIState.Idle);
+
+        
+
+       GameObject.Destroy(gameObject);
+
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using UnityEngine;
@@ -39,7 +39,7 @@ public class ResourceDatabase : MonoBehaviour
 
         for (int i = 0; i < resouceList[num].poolSize; i++)
         {
-            GameObject resource = Instantiate(obj);
+            GameObject resource = Instantiate(obj,transform);
             resource.SetActive(false);
             list.Add(resource);
         }

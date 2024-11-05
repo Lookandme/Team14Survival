@@ -35,11 +35,10 @@ public class Enemy : MonoBehaviour, IDamagable
     [Header("Combat")]
     public float damage;
     public float attackRate;
-    private float lastAttackTime = 0f;
     public float attackDistance;
 
     private float playerDistance;
-    private bool isAttacking = false; 
+     
 
     private NavMeshAgent agent;
     private Animator animator;
@@ -57,13 +56,12 @@ public class Enemy : MonoBehaviour, IDamagable
     {
 
         StartCoroutine(nameof(StartEuemy));
-
+        agent.stoppingDistance = attackDistance;
 
     }
     private void Update()
     {
         playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player.transform.position);
-        Debug.Log(playerDistance);
         switch (aiState)
         {
             case AIState.Idle:
@@ -90,21 +88,8 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private IEnumerator StartEuemy()  // 처음 애너미 소환 모션 후 움직임 시작
     {
-        if(health != 0)
-        {
-            
-            SetState(AIState.Idle);
-           
             yield return new WaitForSeconds(6f);
             SetState(AIState.Wandering);
-            Debug.Log("@@@");
-        }
-        else
-        {
-            animator.SetBool("Die",true);
-            
-            
-        }
     }
     private void ChangedAnimation()
     {
@@ -114,22 +99,13 @@ public class Enemy : MonoBehaviour, IDamagable
         }
         else animator.SetBool("Moving", false);
 
-        if (aiState != AIState.Chasing)
+        if (aiState == AIState.Chasing)
         {
             animator.SetBool("Chasing", true);
         } 
         else animator.SetBool("Chasing", false);
 
-        //if (aiState != AIState.Attacking)
-        //{
-        //    
-        //    agent.isStopped = false;
-        //}
-        //else
-        //{
-        //    
-        //    agent.isStopped = true;
-        //}
+        
     }
 
 
@@ -161,7 +137,8 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private void WanderingUpdate()
     {
-        if (playerDistance > detectDistace && agent.remainingDistance <= 0.1f)
+        
+        if (playerDistance > detectDistace && agent.remainingDistance <= agent.stoppingDistance)
         {
             WanderingLocation();
 
@@ -175,44 +152,31 @@ public class Enemy : MonoBehaviour, IDamagable
     }
     private void ChasingUpdate() // 목표물을 따라가는 로직 목표 사이거리에 따라 상태 갱신
     {
-        animator.ResetTrigger("Attack");
+        
         agent.SetDestination(CharacterManager.Instance.Player.transform.position + Vector3.up);
-        Debug.Log($"destination {agent.destination}");
+        
 
-        if (playerDistance > detectDistace)
+        if (agent.remainingDistance > detectDistace)
         {
             SetState(AIState.Wandering);
         }
 
-        if (playerDistance < attackDistance)
+        if (agent.remainingDistance <= attackDistance)
         {
             SetState(AIState.Attacking);
-            agent.ResetPath();
+           
             
         }
     }
 
 
-    private void AttackingUpdate() // 문제점 공격에 딜레이가 없는상태 수정 필요 !!
+    private void AttackingUpdate() // 문제점 해결 코루틴으로 작성
     {
-       
-        if (Time.time - lastAttackTime >= attackRate)   // 공격을 수행할 수 있는지 체크
+        agent.velocity = Vector3.zero; // 어택이 시작 되면 에이젼트는 멈춰야한다
+        StartCoroutine(nameof(Attacking));
+        if (playerDistance > detectDistace)
         {
-            agent.ResetPath();
-            animator.SetTrigger("Attack");
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, attackDistance, targetMask))
-            {
-                hit.collider.GetComponent<IDamagable>().GetDamage(damage);
-                
-            }
-
-            
-            lastAttackTime = Time.time;  // 마지막 공격 시간 업데이트
-        }
-        if(playerDistance > attackDistance) // 공격 범위를 벗어났다면?
-        {
+            StopCoroutine(nameof(Attacking));
             SetState(AIState.Chasing);
         }
     }
@@ -242,26 +206,40 @@ public class Enemy : MonoBehaviour, IDamagable
         return hit.position;
     }
 
-    public void GetDamage(float damage) // 플레이어 한테 데미지를 주는 매서드
+    private IEnumerator Attacking()  // 플레이어가 공격 범위에 들어오면 공격 간격마다 공격 애니메이션 
+    {
+        while (playerDistance < attackDistance)
+        {
+            animator.SetTrigger("Attack");
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, attackDistance, targetMask))
+            {
+                hit.collider.GetComponent<IDamagable>().GetDamage(damage);
+            }
+            yield return new WaitForSeconds(attackRate);
+        }
+
+
+    }
+
+    public void GetDamage(float damage) // 플레이어 한테 데미지를 주는 매서드 체력이 바닥나면 죽음 상태가 된다
     {
         animator.SetTrigger("GetDamage");
         health -= damage;
         if (health <= 0)
-            Die();
-
-    }
-
-
-    
-
-
-    private void Die()
-    {
-        SetState(AIState.Idle);
-
+            StartCoroutine(nameof(Die));
         
-
-       GameObject.Destroy(gameObject);
-
     }
+    private IEnumerator Die() // 죽음 애니메이션 재생후 5초 후 게임 오브젝트 삭제
+    {
+        animator.SetBool("Die", true);
+        yield return new WaitForSeconds(5f);
+        GameObject.Destroy(gameObject);
+    }
+
+
+
+
+
 }

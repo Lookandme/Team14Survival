@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -43,16 +43,18 @@ public class ResourceSpawn : MonoBehaviour
 
     private void Update()
     {
+        resourcePool.GetUselessResource();
+
         if (inHuman) return; //사람이 있으면 동작 중단
 
         if(Time.time - lastCheckTime > recentlyTime)
         {
             lastCheckTime = Time.time;
-            CheckResourceSpawn();
+            CheckResource();
         }
     }
 
-    private void CheckResourceSpawn()
+    private void CheckResource()
     {
         if (resourceName == null) return;
         
@@ -60,11 +62,11 @@ public class ResourceSpawn : MonoBehaviour
         {
             if (resourcePool.CheckQueueEmpty(resourceName[i])) //큐의 내용물을 확인하여 Spawning 호출 true 일 때 Dequeue 가능
             {
-                Spawning(resourceName[i]);
+                Spawn(resourceName[i]);
             }
         }
     }
-    private void Spawning(string resourceName) //자원 스폰
+    private void Spawn(string resourceName) //자원 스폰
     {
         GameObject obj = resourcePool.GetResourceInPool(resourceName);
         if (obj == null) return;
@@ -86,21 +88,21 @@ public class ResourceSpawn : MonoBehaviour
 
     private Vector3 GetResourceSpawnPoint() //스폰 지점 설정 로직
     {
-        Vector3 point = new Vector3(Random.Range(minXPoint,maxXPoint),10,Random.Range(minZPoint,maxZPoint));
-        return transform.position + point;
+        Vector3 point = new Vector3(Random.Range(minXPoint,maxXPoint),0,Random.Range(minZPoint,maxZPoint)); //xz 좌표 범위 중 랜덤 값
+        return transform.position + point; //현재 오브젝트의 위치에서 xz값만 변경
     }
 
     private bool TrySetSpawnPoint(ref Vector3 point) //스폰 지점을 확인
     {
         if(Physics.Raycast(point + Vector3.up, Vector3.down, out RaycastHit inHit, groundLayer))//Ground 레이어가 있는지 확인
         { 
-            point = inHit.point;
+            point = inHit.point;//ray의 착탄점에 스폰되도록 변경
             return true;
         } 
         return false;
     }
   
-    private void OnCollisionStay(Collision collision) //콜라이더 충돌이 지속될시 실행
+    private void OnTriggerStay(Collider other)
     {
         inHuman = false;
         Collider[] colliders = Physics.OverlapSphere(transform.position, inHumanDistance); //오버랩은 콜라이더 충돌 발생시 해당 지점의 콜라이더 들을 모두 가져옴
@@ -111,7 +113,15 @@ public class ResourceSpawn : MonoBehaviour
             {
                 inHuman = true;
                 break;
-            }     
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if( other.CompareTag("Player"))
+        {
+            inHuman = false ;
         }
     }
 }

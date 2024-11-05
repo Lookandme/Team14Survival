@@ -1201,7 +1201,7 @@ GameObject:
   - component: {fileID: 8996396077450950280}
   m_Layer: 0
   m_Name: Demon
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1214,7 +1214,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5918163954749999492}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 563.7, y: 17.448, z: 227.7}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
@@ -1279,19 +1279,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b96d31a8b68ee743857eb8fd49142cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  health: 100
   walkSpeed: 2
   runSpeed: 4
   detectDistace: 10
-  safeDistace: 2
   minWanderDistance: 5
   maxWanderDistance: 50
   minWanderWaitTime: 3
   maxWanderWaitTime: 6
-  damage: 0
-  attackRate: 0
+  damage: 5
+  attackRate: 2
   attackDistance: 5
-  fieldOfView: 120
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!65 &8996396077450950280
 BoxCollider:
   m_ObjectHideFlags: 0

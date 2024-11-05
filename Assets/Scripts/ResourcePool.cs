@@ -23,7 +23,7 @@ public class ResourcePool : MonoBehaviour
     {
         if (!resourceDictionary.ContainsKey(resourceName)) return null; //해당 이름의 키가 없다면 돌아감
 
-        if (resourceDictionary[resourceName] == null) return null; //
+        if (resourceDictionary[resourceName] == null) return null; 
         GameObject obj = resourceDictionary[resourceName].Dequeue();
         return obj;
     }
@@ -38,10 +38,21 @@ public class ResourcePool : MonoBehaviour
         return isIn; //true를 반환
     }
 
-    public void GetUselessResource(string name)
+    public void GetUselessResource()
     {
-        if (!resourceDictionary.ContainsKey(name)) return;
+        Resource[] objects = GetComponentsInChildren<Resource>(true); //오브젝트의 하위 게임오브젝트들을 가져옴 true를 쓴 이유는 비활성화 된 오브젝트를 찾기 위해
+        foreach (Resource obj in objects)
+        {
+            if(obj.GetComponent<Resource>().capacity == 0 && !obj.gameObject.activeSelf) //해당 오브젝트의 리소스 컴포넌트 정보를 가져와 체력이 0이고 비활성화 된 것을 찾음
+            {
+                obj.GetComponent<Resource>().capacity = 10; //오브젝트의 체력을 원상 복구
 
-        
+                string name = obj.name;
+                name = name.Replace("(Clone)","");//키를 입력하기 위해 복제된 프리팹의 이름을 가져와 clone을 제거
+                Debug.Log(name);
+
+                resourceDictionary[name].Enqueue(obj.gameObject) ; //해당오브젝트의 태그에 맞는 키 값에 입력
+            }
+        }
     }
 }

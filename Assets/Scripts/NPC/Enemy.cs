@@ -68,7 +68,7 @@ public class Enemy : MonoBehaviour, IDamagable
                 StartCoroutine(nameof(StartEuemy));
                 break;
             case AIState.Wandering:
-                WanderingUpdate();
+                //WanderingUpdate();
                
                 break;
             case AIState.Attacking:
@@ -148,7 +148,6 @@ public class Enemy : MonoBehaviour, IDamagable
             SetState(AIState.Chasing);
 
         }
-
     }
     private void ChasingUpdate() // 목표물을 따라가는 로직 목표 사이거리에 따라 상태 갱신
     {

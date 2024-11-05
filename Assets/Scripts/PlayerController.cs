@@ -20,9 +20,11 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot; //마우스의 델타값 받아오는 변수
     public float lookSensitivity; //마우스 민감도
     public bool canLook = true;
+    public bool isPrewviewActive;
 
     public Action inventory;
     public Action craftManual;
+    public Action escape;
     private Vector2 mouseDelta;
 
     private Rigidbody _rigidbody;
@@ -119,9 +121,23 @@ public class PlayerController : MonoBehaviour
     {
         if (callbackContext.phase == InputActionPhase.Started)
         {
-            craftManual?.Invoke();
             inventory?.Invoke();
             ToggleCursor();
+        }
+    }
+    public void OnCraftButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started)
+        {
+            craftManual?.Invoke();
+            ToggleCursor();
+        }
+    }
+    public void OnEscapeButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started)
+        {
+            escape?.Invoke();
         }
     }
     void ToggleCursor()

@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
-using UnityEngine.InputSystem.XR;
-
 public class CraftManual : MonoBehaviour
 {
     [System.Serializable]
@@ -15,14 +10,12 @@ public class CraftManual : MonoBehaviour
     }
 
     private bool isActive = false;
-    private bool isPrewviewActive = false;
 
     [SerializeField] private GameObject baseUI;
     [SerializeField] private Craft[] craftFire;
 
-
     private GameObject preview;
-    public GameObject prefab;
+    private GameObject prefab;
     private PlayerController controller;
 
     [SerializeField] private Transform transform;
@@ -36,24 +29,23 @@ public class CraftManual : MonoBehaviour
     {
         preview = Instantiate(craftFire[slotNumber].previewPrefab, hit.point, Quaternion.identity);
         prefab = craftFire[slotNumber].prefab;
-        isPrewviewActive = true;
+        controller.isPrewviewActive = true;
         baseUI.SetActive(false);
+        controller.canLook = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Start()
     {
+        baseUI.SetActive(false);
         camera = Camera.main;
         controller = CharacterManager.Instance.Player.controller;
-        //controller.inventory += Toggle;
+        controller.craftManual += Window;
+        controller.escape += Cancle;
     }
-    void Update() //개선필요
+    void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F) && !isPrewviewActive)
-        {
-            Window();
-        }
-
-        if (isPrewviewActive)
+        if (controller.isPrewviewActive)
         {
             PreviewPostionUpdate();
         }
@@ -62,19 +54,15 @@ public class CraftManual : MonoBehaviour
         {
             Build();
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cancle();
-        }
     }
     void Build()
     {
-        if (isPrewviewActive && preview.GetComponent<PreviewObject>().isBuildable())
+        if (controller.isPrewviewActive && preview.GetComponent<PreviewObject>().isBuildable())
         {
             Instantiate(prefab, hit.point, Quaternion.identity);
             Destroy(preview);
             isActive = false;
-            isPrewviewActive = false;
+            controller.isPrewviewActive = false;
             prefab = null;
             preview = null;
         }
@@ -92,26 +80,15 @@ public class CraftManual : MonoBehaviour
             }
         }
     }
-    /* public void Toggle()
-     {
-         if (inventoryWindow.activeInHierarchy)
-         {
-            BaseUI.SetActive(false);
-            Destroy(preview);
-         }
-         else
-         {
-             BaseUI.SetActive(true);
-         }
-     }*/
+
     void Cancle()
     {
-        if (isPrewviewActive)
+        if (controller.isPrewviewActive)
         {
             Destroy(preview);
         }
         isActive = false;
-        isPrewviewActive = false;
+        controller.isPrewviewActive = false;
         preview = null;
         prefab = null;
 

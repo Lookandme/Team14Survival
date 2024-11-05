@@ -1,7 +1,5 @@
 
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -24,7 +22,7 @@ public class Enemy : MonoBehaviour, IDamagable
     [Header("AI")]
     private AIState aiState;
     public float detectDistace;
-   
+
 
     [Header("Wandering")]
     public float minWanderDistance;
@@ -38,13 +36,14 @@ public class Enemy : MonoBehaviour, IDamagable
     public float attackDistance;
 
     private float playerDistance;
-     
+
 
     private NavMeshAgent agent;
     private Animator animator;
     private SkinnedMeshRenderer[] skinnedMeshes;
     public LayerMask targetMask;
     PlayerConditions playerConditions;
+
 
     private void Awake()
     {
@@ -61,6 +60,7 @@ public class Enemy : MonoBehaviour, IDamagable
     }
     private void Update()
     {
+        Debug.Log(agent.remainingDistance);
         playerDistance = Vector3.Distance(transform.position, CharacterManager.Instance.Player.transform.position);
         switch (aiState)
         {
@@ -69,44 +69,29 @@ public class Enemy : MonoBehaviour, IDamagable
                 break;
             case AIState.Wandering:
                 WanderingUpdate();
-               
+
                 break;
             case AIState.Attacking:
                 AttackingUpdate();
                 break;
             case AIState.Chasing:
                 ChasingUpdate();
-                
+
                 break;
-
-
-
+                
         }
-        ChangedAnimation();
+        animator.SetBool("Moving", aiState != AIState.Idle);
+        animator.SetBool("Chasing", aiState == AIState.Chasing);
+        
 
     }
 
     private IEnumerator StartEuemy()  // 처음 애너미 소환 모션 후 움직임 시작
     {
-            yield return new WaitForSeconds(6f);
-            SetState(AIState.Wandering);
+        yield return new WaitForSeconds(6f);
+        SetState(AIState.Wandering);
     }
-    private void ChangedAnimation()
-    {
-        if(aiState == AIState.Wandering)
-        {
-            animator.SetBool("Moving", true);
-        }
-        else animator.SetBool("Moving", false);
 
-        if (aiState == AIState.Chasing)
-        {
-            animator.SetBool("Chasing", true);
-        } 
-        else animator.SetBool("Chasing", false);
-
-        
-    }
 
 
     private void SetState(AIState state)
@@ -137,7 +122,7 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private void WanderingUpdate()
     {
-        
+        animator.SetBool("Attack", false);
         if (playerDistance > detectDistace && agent.remainingDistance <= agent.stoppingDistance)
         {
             WanderingLocation();
@@ -152,29 +137,33 @@ public class Enemy : MonoBehaviour, IDamagable
     }
     private void ChasingUpdate() // 목표물을 따라가는 로직 목표 사이거리에 따라 상태 갱신
     {
-        
+        animator.SetBool("Attack", false);
         agent.SetDestination(CharacterManager.Instance.Player.transform.position + Vector3.up);
-        
+
 
         if (agent.remainingDistance > detectDistace)
         {
+
             SetState(AIState.Wandering);
         }
 
-        if (agent.remainingDistance <= attackDistance)
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
+
             SetState(AIState.Attacking);
-           
-            
+
+
         }
     }
 
 
     private void AttackingUpdate() // 문제점 해결 코루틴으로 작성
     {
-        agent.velocity = Vector3.zero; // 어택이 시작 되면 에이젼트는 멈춰야한다
+        agent.velocity = Vector3.zero;
+        // 어택이 시작 되면 에이젼트는 멈춰야한다
         StartCoroutine(nameof(Attacking));
-        if (playerDistance > detectDistace)
+
+        if (playerDistance >= attackDistance)
         {
             StopCoroutine(nameof(Attacking));
             SetState(AIState.Chasing);
@@ -208,19 +197,17 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private IEnumerator Attacking()  // 플레이어가 공격 범위에 들어오면 공격 간격마다 공격 애니메이션 
     {
-        while (playerDistance < attackDistance)
+
+
+        animator.SetBool("Attack", true);
+        
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, attackDistance, targetMask))
         {
-            animator.SetTrigger("Attack");
-
-            RaycastHit hit;
-            if (Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, attackDistance, targetMask))
-            {
-                hit.collider.GetComponent<IDamagable>().GetDamage(damage);
-            }
-            yield return new WaitForSeconds(attackRate);
+            hit.collider.GetComponent<IDamagable>().GetDamage(damage);
         }
-
-
+        yield return new WaitForSeconds(attackRate);
+        
     }
 
     public void GetDamage(float damage) // 플레이어 한테 데미지를 주는 매서드 체력이 바닥나면 죽음 상태가 된다
@@ -229,7 +216,7 @@ public class Enemy : MonoBehaviour, IDamagable
         health -= damage;
         if (health <= 0)
             StartCoroutine(nameof(Die));
-        
+
     }
     private IEnumerator Die() // 죽음 애니메이션 재생후 5초 후 게임 오브젝트 삭제
     {
@@ -237,9 +224,13 @@ public class Enemy : MonoBehaviour, IDamagable
         yield return new WaitForSeconds(5f);
         GameObject.Destroy(gameObject);
     }
-
-
-
-
-
 }
+
+
+
+
+
+
+
+
+

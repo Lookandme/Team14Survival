@@ -56,10 +56,10 @@ public class PlayerConditions : MonoBehaviour , IDamagable
         {
             Die();
         }
-        Debug.Log("health:" + health.GetValue());
-        Debug.Log("stamina:" + stamina.GetValue());
-        Debug.Log("hunger:" + hunger.GetValue());
-        Debug.Log("thirst:" + thirst.GetValue());
+        //Debug.Log("health:" + health.GetValue());
+        //Debug.Log("stamina:" + stamina.GetValue());
+        //Debug.Log("hunger:" + hunger.GetValue());
+        //Debug.Log("thirst:" + thirst.GetValue());
     }
 
     private void Starve()

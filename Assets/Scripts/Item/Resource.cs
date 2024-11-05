@@ -18,7 +18,7 @@ public class Resource : MonoBehaviour
 
         if (capacity <= 0)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

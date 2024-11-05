@@ -12,7 +12,7 @@ public enum AIState
 
 }
 
-public class Enemy : MonoBehaviour, IDamagable
+public class Enemy : MonoBehaviour,IDamagable
 {
     [Header("Stats")]
     public float health;
@@ -212,15 +212,28 @@ public class Enemy : MonoBehaviour, IDamagable
 
     public void GetDamage(float damage) // 플레이어 한테 데미지를 주는 매서드 체력이 바닥나면 죽음 상태가 된다
     {
-        animator.SetTrigger("GetDamage");
         health -= damage;
+        StartCoroutine(nameof(Hurt));
         if (health <= 0)
+        {
             StartCoroutine(nameof(Die));
+        }
+
+    }
+
+    private IEnumerator Hurt() // 피격 모션
+    {
+        agent.ResetPath();
+        agent.velocity = Vector3.zero;
+        animator.SetBool("GetDamage", true);
+        yield return new WaitForSeconds(3.5f);
+        animator.SetBool("GetDamage", false);
 
     }
     private IEnumerator Die() // 죽음 애니메이션 재생후 5초 후 게임 오브젝트 삭제
     {
-        animator.SetBool("Die", true);
+        animator.SetTrigger("Die");
+        agent.ResetPath();
         yield return new WaitForSeconds(5f);
         GameObject.Destroy(gameObject);
     }

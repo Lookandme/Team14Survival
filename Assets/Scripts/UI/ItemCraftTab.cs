@@ -17,11 +17,19 @@ public class ItemCraftTab : MonoBehaviour
     public Image material2Icon; //재료2 이미지
     public Image craftIcon; //조합 완료 이미지
 
+    public Button button;
+    public Image buttonBg; //버튼 배경색 비활성화시 회색, 활성화시 초록색
+    private Color originalColor;
+
     public TextMeshProUGUI material1QuatityText;//재료 1필요양
     public TextMeshProUGUI material2QuatityText;//재료 2필요양
     public TextMeshProUGUI craftQuatityText;//가공 후 양
 
-    private Outline outline; //이 이미지 외곽 아웃라인
+    int material1Quatity;
+    int material2Quatity;
+    int craftQuatity;
+
+    public Outline outline; //이 이미지 외곽 아웃라인
 
     public bool isActivated = false; //버튼 활성화 여부
 
@@ -43,17 +51,14 @@ public class ItemCraftTab : MonoBehaviour
 
     private void Start()
     {
-        SetUI();
-    }
-
-    private void SetUI()
-    {
+        originalColor = buttonBg.color; // 기존 색상 저장
         PrintMaterials(); //등록된 스크립터블오브젝트 정보가져오기
         PrintResults();
         PrintResultsQuantity();
         PrintMaterialsQuantity();
         material1 = materialsArray[0];
         material2 = materialsArray[1];
+        result = resultsArray[0];
 
         material1Icon.sprite = materialsArray[0].icon;
         material2Icon.sprite = materialsArray[1].icon;
@@ -62,6 +67,10 @@ public class ItemCraftTab : MonoBehaviour
         material1QuatityText.text = materialsQuantityArray[0].ToString();
         material2QuatityText.text = materialsQuantityArray[1].ToString();
         craftQuatityText.text = resultsQuantityArray[0].ToString();
+
+        material1Quatity = materialsQuantityArray[0];
+        material2Quatity = materialsQuantityArray[1];
+        craftQuatity = resultsQuantityArray[0];
     }
 
     // 스크립터블오브젝트 CraftingRecipe내부에 있는 스크립터블 오브젝트 ItemData들의 정보를 출력할 수있나?
@@ -111,10 +120,14 @@ public class ItemCraftTab : MonoBehaviour
         }
     }
 
-    /*
+    //재료가 있을 경우 버튼 활성화. 여기서는 초록색으로만 뜨게 하면 됨.
+    public void ActiveButton()
+    {
+        buttonBg.color = inventory.HasItem(material1, material2, material1Quatity, material2Quatity) ? Color.green : originalColor;
+    }
+
     public void OnClickButton()
     {
-        inventory.SelectItem(index);
+        inventory.CraftItem(result);
     }
-    */
 }

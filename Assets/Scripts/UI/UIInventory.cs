@@ -258,95 +258,57 @@ public class UIInventory : MonoBehaviour
     {
         UnEquip(selectedItemIndex);
     }
-    public bool HasItem(ItemData item, int quantity)
-    {
-        int totalQuantity = 0;
 
+    public bool HasItem(ItemData item1, ItemData item2, int quantity1, int quantity2)
+    {
+        int totalQuantity1 = 0;
+        int totalQuantity2 = 0;
+
+        // 모든 슬롯을 순회하여 각각의 아이템 수량을 체크
         foreach (var slot in slots)
         {
-            if (slot.item == item)
+            if (slot.item == item1)
             {
-                totalQuantity += slot.quantity;
-
-                if (totalQuantity >= quantity)
-                    return true;
+                totalQuantity1 += slot.quantity;
+            }
+            else if (slot.item == item2)
+            {
+                totalQuantity2 += slot.quantity;
             }
         }
 
-        return false;
+        // item1과 item2가 각각 필요한 수량을 만족하는지 확인
+        return (totalQuantity1 >= quantity1) && (totalQuantity2 >= quantity2);
     }
 
-    public bool CraftItem(CraftingRecipe recipe)
+    public void CraftItem(ItemData craftedItem)
     {
-        // Check if the inventory has all required materials
-        foreach (var material in recipe.Materials)
+        //ItemData data = CharacterManager.Instance.Player.itemData;
+
+        if (craftedItem.canStack)
         {
-            if (!HasItem(material.item, material.Amount))
+            ItemSlot slot = GetItemStack(craftedItem);
+            if (slot != null)
             {
-                Debug.LogWarning("Not enough materials to craft!");
-                return false;
+                slot.quantity++;
+                UpdateUI();
+                CharacterManager.Instance.Player.itemData = null;
+                return;
             }
         }
 
-        // Deduct materials from inventory
-        foreach (var material in recipe.Materials)
+        ItemSlot emptySlot = GetEmptySlot();
+
+        if (emptySlot != null)
         {
-            RemoveItems(material.item, material.Amount);
+            emptySlot.item = craftedItem;
+            emptySlot.quantity = 1;
+            UpdateUI();
+            CharacterManager.Instance.Player.itemData = null;
+            return;
         }
 
-        // Add result items to inventory
-        foreach (var result in recipe.Results)
-        {
-            AddItemToInventory(result.item, result.Amount);
-        }
-
-        Debug.Log("Item crafted successfully!");
-        return true;
-    }
-
-    private void RemoveItems(ItemData item, int quantity)
-    {
-        for (int i = 0; i < slots.Length; i++)
-        {
-            if (slots[i].item == item)
-            {
-                int toRemove = Mathf.Min(quantity, slots[i].quantity);
-                slots[i].quantity -= toRemove;
-                quantity -= toRemove;
-
-                if (slots[i].quantity <= 0)
-                {
-                    slots[i].item = null;
-                    slots[i].Clear();
-                }
-
-                if (quantity <= 0)
-                    break;
-            }
-        }
-
-        UpdateUI();
-    }
-
-    private void AddItemToInventory(ItemData item, int quantity)
-    {
-        while (quantity > 0)
-        {
-            ItemSlot slot = GetItemStack(item) ?? GetEmptySlot();
-            if (slot == null)
-            {
-                Debug.LogWarning("No space in inventory!");
-                break;
-            }
-
-            int addQuantity = Mathf.Min(quantity, item.maxStackAmount - slot.quantity);
-            slot.item = item;
-            slot.quantity += addQuantity;
-            quantity -= addQuantity;
-
-            slot.Set();
-        }
-
-        UpdateUI();
+        ThrowItem(craftedItem);
+        CharacterManager.Instance.Player.itemData = null;
     }
 }

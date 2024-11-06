@@ -158,4 +158,12 @@ public class PlayerController : MonoBehaviour
             ToggleCursor();
         }
     }
+
+    public void OnEscapeButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started)
+        {
+            escape?.Invoke();
+        }
+    }
 }

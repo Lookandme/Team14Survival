@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 public class CraftManual : MonoBehaviour
 {
     [System.Serializable]
@@ -78,6 +77,7 @@ public class CraftManual : MonoBehaviour
         controller = CharacterManager.Instance.Player.controller;
         controller.craftManual += Window;
         controller.escape += Cancle;
+        controller.craftRotate += RotatePostion;
     }
     void Update()
     {
@@ -95,7 +95,7 @@ public class CraftManual : MonoBehaviour
     {
         if (controller.isPrewviewActive && preview.GetComponent<PreviewObject>().isBuildable())
         {
-            Instantiate(prefab, hit.point, Quaternion.identity);
+            Instantiate(prefab, hit.point, preview.transform.rotation);
             Destroy(preview);
             isActive = false;
             controller.isPrewviewActive = false;
@@ -116,15 +116,14 @@ public class CraftManual : MonoBehaviour
             }
         }
     }
-    public void OnCraftButton(InputAction.CallbackContext callbackContext)
-    {
-        if (callbackContext.phase == InputActionPhase.Started && controller.isPrewviewActive)
-        {
-            // Y축을 기준으로 45도씩 회전
-            preview.transform.Rotate(Vector3.up, 45f);
-        }
-    }
+    
 
+    void RotatePostion()
+    {
+        // Y축을 기준으로 45도씩 회전
+        preview.transform.Rotate(Vector3.up, 45f);
+        prefab.transform.Rotate(Vector3.up, 45f);
+    }
     void Cancle()
     {
         if (controller.isPrewviewActive)

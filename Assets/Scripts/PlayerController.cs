@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -25,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public Action inventory;
     public Action craftManual;
     public Action escape;
+    public Action craftRotate;
     private Vector2 mouseDelta;
 
     private Rigidbody _rigidbody;
@@ -138,6 +137,13 @@ public class PlayerController : MonoBehaviour
         if (callbackContext.phase == InputActionPhase.Started)
         {
             escape?.Invoke();
+        }
+    }
+    public void OnCraftRotateButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started && isPrewviewActive)
+        {
+            craftRotate?.Invoke();
         }
     }
     void ToggleCursor()

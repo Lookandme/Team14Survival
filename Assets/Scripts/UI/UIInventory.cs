@@ -260,6 +260,93 @@ public class UIInventory : MonoBehaviour
     }
     public bool HasItem(ItemData item, int quantity)
     {
+        int totalQuantity = 0;
+
+        foreach (var slot in slots)
+        {
+            if (slot.item == item)
+            {
+                totalQuantity += slot.quantity;
+
+                if (totalQuantity >= quantity)
+                    return true;
+            }
+        }
+
         return false;
+    }
+
+    public bool CraftItem(CraftingRecipe recipe)
+    {
+        // Check if the inventory has all required materials
+        foreach (var material in recipe.Materials)
+        {
+            if (!HasItem(material.item, material.Amount))
+            {
+                Debug.LogWarning("Not enough materials to craft!");
+                return false;
+            }
+        }
+
+        // Deduct materials from inventory
+        foreach (var material in recipe.Materials)
+        {
+            RemoveItems(material.item, material.Amount);
+        }
+
+        // Add result items to inventory
+        foreach (var result in recipe.Results)
+        {
+            AddItemToInventory(result.item, result.Amount);
+        }
+
+        Debug.Log("Item crafted successfully!");
+        return true;
+    }
+
+    private void RemoveItems(ItemData item, int quantity)
+    {
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i].item == item)
+            {
+                int toRemove = Mathf.Min(quantity, slots[i].quantity);
+                slots[i].quantity -= toRemove;
+                quantity -= toRemove;
+
+                if (slots[i].quantity <= 0)
+                {
+                    slots[i].item = null;
+                    slots[i].Clear();
+                }
+
+                if (quantity <= 0)
+                    break;
+            }
+        }
+
+        UpdateUI();
+    }
+
+    private void AddItemToInventory(ItemData item, int quantity)
+    {
+        while (quantity > 0)
+        {
+            ItemSlot slot = GetItemStack(item) ?? GetEmptySlot();
+            if (slot == null)
+            {
+                Debug.LogWarning("No space in inventory!");
+                break;
+            }
+
+            int addQuantity = Mathf.Min(quantity, item.maxStackAmount - slot.quantity);
+            slot.item = item;
+            slot.quantity += addQuantity;
+            quantity -= addQuantity;
+
+            slot.Set();
+        }
+
+        UpdateUI();
     }
 }

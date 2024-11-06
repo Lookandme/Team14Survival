@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
 
     public Action inventory;
     public Action craftManual;
+    public Action itemCraft;
     private Vector2 mouseDelta;
 
     private Rigidbody _rigidbody;
@@ -129,5 +130,15 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }
+
+    public void OnItemCraftingButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started)
+        {
+            itemCraft?.Invoke();
+            inventory?.Invoke();
+            ToggleCursor();
+        }
     }
 }

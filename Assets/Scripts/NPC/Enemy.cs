@@ -157,7 +157,7 @@ public class Enemy : MonoBehaviour, IDamagable
     private void ChasingUpdate() // 목표물을 따라가는 로직 목표 사이거리에 따라 상태 갱신
     {
         animator.SetBool("Chasing", true);
-        agent.transform.LookAt(transform.position, CharacterManager.Instance.Player.transform.position);
+        agent.transform.LookAt(CharacterManager.Instance.Player.transform.position);
         agent.SetDestination(CharacterManager.Instance.Player.transform.position + Vector3.up);
 
 
@@ -179,7 +179,7 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private void AttackingUpdate() // 
     {
-        agent.transform.LookAt(transform.position, CharacterManager.Instance.Player.transform.position);
+        transform.LookAt( CharacterManager.Instance.Player.transform.position);
 
         // 어택이 시작 되면 에이젼트는 멈춰야한다
         if (Time.time - lastAttackTime > attackRate)

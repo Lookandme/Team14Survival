@@ -166,7 +166,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -174,7 +174,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1215
+    m_Bits: 3519
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5557,6 +5557,54 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 62e52c04-7ab6-4cf4-9762-859f0e3ccb8c
     m_ActionName: Player/ItemCrafting[/Keyboard/i]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4300361407981012049}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnCraftRotateButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: eeb564a9-7d6d-4ebb-96cc-dc26108c4e09
+    m_ActionName: Player/CraftRotate[/Keyboard/z]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4300361407981012049}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnEscapeButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 40261331-415f-4daf-a9f1-af1c7eb85e42
+    m_ActionName: Player/Escape[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4300361407981012049}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnCraftButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 888b4eb8-9c2c-4fa7-91b7-03b3fbd5843b
+    m_ActionName: Player/CraftUI[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -5578,12 +5626,13 @@ MonoBehaviour:
   jumpPower: 80
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 63
   cameraContainer: {fileID: 7059400848473685277}
   minXLook: -85
   maxXLook: 85
   lookSensitivity: 0.1
   canLook: 1
+  isPrewviewActive: 0
 --- !u!114 &5793599972896130807
 MonoBehaviour:
   m_ObjectHideFlags: 0

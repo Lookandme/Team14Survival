@@ -331,19 +331,27 @@ public class UIInventory : MonoBehaviour
         ItemSlot slot = GetItemStack(material);
         
         slot.quantity -= quantity;
-
+        
         if (slot.quantity <= 0)
         {
-            slot = null;
-            //selectedItemIndex = -1;
-            ClearMaterialItemWindow(material);
+            Debug.Log("a");
+            slot.quatityText.text = string.Empty;
+            slot.icon.sprite = null;
+            slot.item = null;
+            selectedItemIndex = -1;
+            //ClearMaterialItemWindow(material);
         }
+        Debug.Log("b");
         UpdateUI();
-    }
+    } 
+    //selectedItem으로는 수정 불가.
+    //
+    //여기서 전처리가 이뤄져야한다. 판비워지고, 글자 지워주기. 이미지 지워주기.
 
     public void ClearMaterialItemWindow(ItemData material)
     {
         ItemSlot slot = GetItemStack(material);
+        
 
         slot.inventory.selectedItem = null;
         slot.inventory.selectedItemName.text = string.Empty;
@@ -355,5 +363,20 @@ public class UIInventory : MonoBehaviour
         slot.inventory.equipButton.SetActive(false);
         slot.inventory.unEquipButton.SetActive(false);
         slot.inventory.dropButton.SetActive(false);
+    }
+
+    void ClearSelectedItemWindow3()
+    {
+        selectedItem = null;
+
+        selectedItemName.text = string.Empty;
+        selectedItemDescription.text = string.Empty;
+        selectedItemStatName.text = string.Empty;
+        selectedItemStatValue.text = string.Empty;
+
+        useButton.SetActive(false);
+        equipButton.SetActive(false);
+        unEquipButton.SetActive(false);
+        dropButton.SetActive(false);
     }
 }

@@ -132,9 +132,9 @@ public class ItemCraftTab : MonoBehaviour
 
         if (inventory.CanCraft(material1, material2, material1Quatity, material2Quatity))
         {
-            inventory.CraftItem(result);
             inventory.RemoveMaterialItem(material1, material1Quatity);
             inventory.RemoveMaterialItem(material2, material2Quatity);
+            inventory.CraftItem(result);
         }
 
     }

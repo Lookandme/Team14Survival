@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1887254887358238181}
   - component: {fileID: 3081469206801405097}
   - component: {fileID: 4035539678568895202}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Meterial
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 2637325270813359216}
   - component: {fileID: 6980909774785425452}
   - component: {fileID: 9200390688504210760}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Foundation
   m_TagString: Untagged
   m_Icon: {fileID: 0}

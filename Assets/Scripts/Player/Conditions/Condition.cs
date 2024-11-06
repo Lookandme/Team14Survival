@@ -15,6 +15,11 @@ public class Condition : MonoBehaviour
         passiveValue = passiveValueData;
     }
 
+    public void SetValue(float loadValueData)
+    {
+        curValue = loadValueData;
+    }
+
     public void Add(float value)
     {
         curValue = Mathf.Min(curValue + value,maxValue);

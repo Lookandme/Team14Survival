@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ public interface IDamagable //데미지를 받는 물체의 인터페이스
 }
 public class PlayerConditions : MonoBehaviour , IDamagable
 {
-    PlayerData playerdata;
+    ConditionData conditiondata;
 
     public Condition health;
     public Condition stamina;
@@ -30,12 +31,22 @@ public class PlayerConditions : MonoBehaviour , IDamagable
 
     private void Start()
     {
-        playerdata = CharacterManager.Instance.Player.playerData;
-       
-        health.SetValue(playerdata.health.MaxValue, playerdata.health.passiveValue);
-        stamina.SetValue(playerdata.stamina.MaxValue, playerdata.stamina.passiveValue);
-        hunger.SetValue(playerdata.hunger.MaxValue, playerdata.hunger.passiveValue);
-        thirst.SetValue(playerdata.thirst.MaxValue, playerdata.thirst.passiveValue);
+        conditiondata = CharacterManager.Instance.Player.playerData;
+        PlayerDataBridge bridge = CharacterManager.Instance.Player.dataBridge;
+
+
+        health.SetValue(conditiondata.health.MaxValue, conditiondata.health.passiveValue);
+        stamina.SetValue(conditiondata.stamina.MaxValue, conditiondata.stamina.passiveValue);
+        hunger.SetValue(conditiondata.hunger.MaxValue, conditiondata.hunger.passiveValue);
+        thirst.SetValue(conditiondata.thirst.MaxValue, conditiondata.thirst.passiveValue);
+
+        if (!bridge.isFistRun)
+        {
+            health.SetValue(bridge.health);
+            stamina.SetValue(bridge.stamina);
+            hunger.SetValue(bridge.hunger);
+            thirst.SetValue(bridge.thirst);
+        }
     }
 
     private void Update()
@@ -113,5 +124,16 @@ public class PlayerConditions : MonoBehaviour , IDamagable
     {
         health.Subtract(damage);
         PlayerOnAttack?.Invoke(); //피격 시 구독중인 메서드 호출
+    }
+
+    public List<float> SendConditionData()
+    {
+        List<float> data = new List<float>();
+        data.Add(health.GetValue());
+        data.Add(stamina.GetValue());
+        data.Add(hunger.GetValue());
+        data.Add(thirst.GetValue());
+        
+        return data;
     }
 }

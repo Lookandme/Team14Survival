@@ -130,4 +130,12 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
     }
+
+    public void OnSave(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            CharacterManager.Instance.Player.dataBridge.SendToDB();
+        }
+    }
 }

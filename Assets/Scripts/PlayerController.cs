@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
     }
     public void OnCraftButton(InputAction.CallbackContext callbackContext)
     {
-        if (callbackContext.phase == InputActionPhase.Started)
+        if (callbackContext.phase == InputActionPhase.Started && !isPrewviewActive)
         {
             craftManual?.Invoke();
             ToggleCursor();

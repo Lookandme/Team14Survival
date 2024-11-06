@@ -20,10 +20,13 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot; //마우스의 델타값 받아오는 변수
     public float lookSensitivity; //마우스 민감도
     public bool canLook = true;
+    public bool isPrewviewActive;
 
     public Action inventory;
     public Action craftManual;
     public Action itemCraft;
+    public Action escape;
+    public Action craftRotate;
     private Vector2 mouseDelta;
 
     private Rigidbody _rigidbody;
@@ -78,7 +81,7 @@ public class PlayerController : MonoBehaviour
         {
             curMovementInput = context.ReadValue<Vector2>();
         }
-        else if(context.phase == InputActionPhase.Canceled)
+        else if (context.phase == InputActionPhase.Canceled)
         {
             curMovementInput = Vector2.zero;
         }
@@ -91,7 +94,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started && IsGrounded())
+        if (context.phase == InputActionPhase.Started && IsGrounded())
         {
             _rigidbody.AddForce(Vector2.up * jumpPower, ForceMode.Impulse);
         }
@@ -120,9 +123,23 @@ public class PlayerController : MonoBehaviour
     {
         if (callbackContext.phase == InputActionPhase.Started)
         {
-            craftManual?.Invoke();
             inventory?.Invoke();
             ToggleCursor();
+        }
+    }
+    public void OnCraftButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started && !isPrewviewActive)
+        {
+            craftManual?.Invoke();
+            ToggleCursor();
+        }
+    }
+    public void OnCraftRotateButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started && isPrewviewActive)
+        {
+            craftRotate?.Invoke();
         }
     }
     void ToggleCursor()

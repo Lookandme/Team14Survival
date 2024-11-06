@@ -258,8 +258,125 @@ public class UIInventory : MonoBehaviour
     {
         UnEquip(selectedItemIndex);
     }
-    public bool HasItem(ItemData item, int quantity)
+    /*
+    public bool HasItem(ItemData item1, ItemData item2, int quantity1, int quantity2)
     {
+        int totalQuantity1 = 0;
+        int totalQuantity2 = 0;
+
+        // 모든 슬롯을 순회하여 각각의 아이템 수량을 체크
+        foreach (var slot in slots)
+        {
+            if (slot.item == item1)
+            {
+                totalQuantity1 += slot.quantity;
+            }
+            else if (slot.item == item2)
+            {
+                totalQuantity2 += slot.quantity;
+            }
+        }
+
+        // item1과 item2가 각각 필요한 수량을 만족하는지 확인
+        return (totalQuantity1 >= quantity1) && (totalQuantity2 >= quantity2);
+    }
+    */
+
+    public bool CanCraft(ItemData material1, ItemData material2, int material1Quatity, int material2Quatity)
+    {
+        ItemSlot slot1 = GetItemStack(material1);
+        ItemSlot slot2 = GetItemStack(material2);
+
+        if ((slot1.item == material1 && slot1.quantity >= material1Quatity) && (slot2.item == material2 && slot2.quantity >= material2Quatity))
+        {
+            return true;
+        }
         return false;
+
+    }
+
+    public void CraftItem(ItemData craftedItem)
+    {
+        //ItemData data = CharacterManager.Instance.Player.itemData;
+
+        if (craftedItem.canStack)
+        {
+            ItemSlot slot = GetItemStack(craftedItem);
+            if (slot != null)
+            {
+                slot.quantity++;
+                UpdateUI();
+                CharacterManager.Instance.Player.itemData = null;
+                return;
+            }
+        }
+
+        ItemSlot emptySlot = GetEmptySlot();
+
+        if (emptySlot != null)
+        {
+            emptySlot.item = craftedItem;
+            emptySlot.quantity = 1;
+            UpdateUI();
+            CharacterManager.Instance.Player.itemData = null;
+            return;
+        }
+
+        ThrowItem(craftedItem);
+        CharacterManager.Instance.Player.itemData = null;
+    }
+
+    public void RemoveMaterialItem(ItemData material, int quantity)
+    {
+        ItemSlot slot = GetItemStack(material);
+        
+        slot.quantity -= quantity;
+        
+        if (slot.quantity <= 0)
+        {
+            Debug.Log("a");
+            slot.quatityText.text = string.Empty;
+            slot.icon.sprite = null;
+            slot.item = null;
+            selectedItemIndex = -1;
+            //ClearMaterialItemWindow(material);
+        }
+        Debug.Log("b");
+        UpdateUI();
+    } 
+    //selectedItem으로는 수정 불가.
+    //
+    //여기서 전처리가 이뤄져야한다. 판비워지고, 글자 지워주기. 이미지 지워주기.
+
+    public void ClearMaterialItemWindow(ItemData material)
+    {
+        ItemSlot slot = GetItemStack(material);
+        
+
+        slot.inventory.selectedItem = null;
+        slot.inventory.selectedItemName.text = string.Empty;
+        slot.inventory.selectedItemDescription.text = string.Empty;
+        slot.inventory.selectedItemStatName.text = string.Empty;
+        slot.inventory.selectedItemStatValue.text = string.Empty;
+
+        slot.inventory.useButton.SetActive(false);
+        slot.inventory.equipButton.SetActive(false);
+        slot.inventory.unEquipButton.SetActive(false);
+        slot.inventory.dropButton.SetActive(false);
+    }
+
+    void ClearSelectedItemWindow3()
+    {
+        selectedItem = null;
+
+        selectedItemName.text = string.Empty;
+        selectedItemDescription.text = string.Empty;
+        selectedItemStatName.text = string.Empty;
+        selectedItemStatValue.text = string.Empty;
+
+        useButton.SetActive(false);
+        equipButton.SetActive(false);
+        unEquipButton.SetActive(false);
+        dropButton.SetActive(false);
     }
 }

@@ -5541,6 +5541,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: b5917485-8655-4981-920d-18df1649e47f
     m_ActionName: Player/Camera[/Keyboard/v]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4300361407981012049}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnItemCraftingButton
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 62e52c04-7ab6-4cf4-9762-859f0e3ccb8c
+    m_ActionName: Player/ItemCrafting[/Keyboard/i]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -5633,6 +5649,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curEquip: {fileID: 0}
   equipParent: {fileID: 950330585756032382}
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &5004758278170698662
 MonoBehaviour:
   m_ObjectHideFlags: 0

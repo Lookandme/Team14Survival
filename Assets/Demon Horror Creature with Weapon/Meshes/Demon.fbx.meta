@@ -153,7 +153,7 @@ ModelImporter:
       takeName: Demon|Get-damage
       internalID: -922236753715791470
       firstFrame: 0
-      lastFrame: 121
+      lastFrame: 25
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -327,14 +327,14 @@ ModelImporter:
       takeName: Demon|Punch1
       internalID: 5825753709171574083
       firstFrame: 0
-      lastFrame: 121
+      lastFrame: 19
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

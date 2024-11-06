@@ -69,27 +69,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Craft",
+                    "name": "ItemCrafting",
                     "type": "Button",
-                    "id": "26407cfd-e18a-4c3b-9c6d-17347a3b09e0",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "escape",
-                    "type": "Button",
-                    "id": "9e584e19-7833-4a60-b610-71233dd62312",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Roate",
-                    "type": "Button",
-                    "id": "c4d4318b-aa88-458f-86c9-dec8e95d7f55",
+                    "id": "62e52c04-7ab6-4cf4-9762-859f0e3ccb8c",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -220,34 +202,12 @@
                 },
                 {
                     "name": "",
-                    "id": "423f7d1e-c6aa-4bb0-b4a4-aec74ba3da4e",
-                    "path": "<Keyboard>/f",
+                    "id": "3aea4aab-9b28-4fec-9a3a-7af89f10ff99",
+                    "path": "<Keyboard>/i",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Craft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e22336fe-d39f-4c67-bdc9-c86f698161c2",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "escape",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8023dccb-0196-40d0-a781-71f3bf7ead33",
-                    "path": "<Keyboard>/z",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Roate",
+                    "action": "ItemCrafting",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

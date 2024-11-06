@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,26 +19,22 @@ public class Equipment : MonoBehaviour
     }
     private void Update()
     {
-       
+
     }
 
     public void OnAttackInput(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed && curEquip != null && controller.canLook)
         {
-            
-            curEquip.OnAttackInput();
-            EquipTool equipTool = curEquip as EquipTool;
-            Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit,   equipTool.attackDistance, targetMask))
-            {
-                hit.collider.GetComponent<IDamagable>().GetDamage( equipTool.damage);
 
-            }
-           
+            curEquip.OnAttackInput();
+
+            
+
         }
     }
+
+    
 
     public void EquipNew(ItemData data)
     {
@@ -53,6 +49,21 @@ public class Equipment : MonoBehaviour
         {
             Destroy(curEquip.gameObject);
             curEquip = null;
+        }
+    }
+
+    public void MonsterHit()
+    {
+        EquipTool equipTool = curEquip as EquipTool;
+
+
+        Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, equipTool.attackDistance, targetMask))
+        {
+
+            hit.collider.GetComponent<IDamagable>().GetDamage(equipTool.damage);
+
         }
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,12 +20,10 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot; //마우스의 델타값 받아오는 변수
     public float lookSensitivity; //마우스 민감도
     public bool canLook = true;
-    public bool isPrewviewActive;
 
     public Action inventory;
     public Action craftManual;
-    public Action escape;
-    public Action craftRotate;
+    public Action itemCraft;
     private Vector2 mouseDelta;
 
     private Rigidbody _rigidbody;
@@ -120,30 +120,9 @@ public class PlayerController : MonoBehaviour
     {
         if (callbackContext.phase == InputActionPhase.Started)
         {
+            craftManual?.Invoke();
             inventory?.Invoke();
             ToggleCursor();
-        }
-    }
-    public void OnCraftButton(InputAction.CallbackContext callbackContext)
-    {
-        if (callbackContext.phase == InputActionPhase.Started && !isPrewviewActive)
-        {
-            craftManual?.Invoke();
-            ToggleCursor();
-        }
-    }
-    public void OnEscapeButton(InputAction.CallbackContext callbackContext)
-    {
-        if (callbackContext.phase == InputActionPhase.Started)
-        {
-            escape?.Invoke();
-        }
-    }
-    public void OnCraftRotateButton(InputAction.CallbackContext callbackContext)
-    {
-        if (callbackContext.phase == InputActionPhase.Started && isPrewviewActive)
-        {
-            craftRotate?.Invoke();
         }
     }
     void ToggleCursor()
@@ -151,5 +130,15 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }
+
+    public void OnItemCraftingButton(InputAction.CallbackContext callbackContext)
+    {
+        if (callbackContext.phase == InputActionPhase.Started)
+        {
+            itemCraft?.Invoke();
+            inventory?.Invoke();
+            ToggleCursor();
+        }
     }
 }

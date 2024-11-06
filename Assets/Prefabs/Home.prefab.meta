@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Prefabs/Home.prefab.meta
 guid: 6433ce556cbe6bf4bba6a192e8849f28
 PrefabImporter:
+========
+guid: 3af46105709bc544ba9d99483a50d935
+DefaultImporter:
+>>>>>>>> Dev3:Assets/Scenes/TestScene_LHK.unity.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

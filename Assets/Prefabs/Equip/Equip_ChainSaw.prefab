@@ -52,6 +52,9 @@ MonoBehaviour:
   doesGatherResources: 1
   doesDealDamage: 0
   damage: 20
+  targetMask:
+    serializedVersion: 2
+    m_Bits: 2048
 --- !u!95 &-5840144306235856896
 Animator:
   serializedVersion: 5

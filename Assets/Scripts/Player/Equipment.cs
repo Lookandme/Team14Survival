@@ -29,17 +29,7 @@ public class Equipment : MonoBehaviour
 
             curEquip.OnAttackInput();
 
-            EquipTool equipTool = curEquip as EquipTool;
-
-
-            Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, equipTool.attackDistance, targetMask))
-            {
-
-                hit.collider.GetComponent<IDamagable>().GetDamage(equipTool.damage);
-
-            }
+            
 
         }
     }
@@ -59,6 +49,21 @@ public class Equipment : MonoBehaviour
         {
             Destroy(curEquip.gameObject);
             curEquip = null;
+        }
+    }
+
+    public void MonsterHit()
+    {
+        EquipTool equipTool = curEquip as EquipTool;
+
+
+        Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, equipTool.attackDistance, targetMask))
+        {
+
+            hit.collider.GetComponent<IDamagable>().GetDamage(equipTool.damage);
+
         }
     }
 }

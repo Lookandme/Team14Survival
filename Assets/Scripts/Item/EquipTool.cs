@@ -14,8 +14,10 @@ public class EquipTool : Equip
     public bool doesDealDamage;
     public int damage;
 
+
     private Animator animator;
     private Camera camera;
+    public LayerMask targetMask;
 
     private void Awake()
     {
@@ -52,10 +54,16 @@ public class EquipTool : Equip
                 resource.Gather(hit.point, hit.normal);
             }
 
-            /*if (doesDealDamage && hit.collider.TryGetComponent(out IDamagable damagable))
-            {
-                damagable.TakePhysicalDamage(damage);
-            }*/
+           
         }
+        
+        if (Physics.Raycast(ray, out hit, attackDistance, targetMask))
+        {
+
+            hit.collider.GetComponent<IDamagable>().GetDamage(damage);
+
+        }
+
+
     }
 }

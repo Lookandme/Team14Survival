@@ -258,7 +258,7 @@ public class UIInventory : MonoBehaviour
     {
         UnEquip(selectedItemIndex);
     }
-
+    /*
     public bool HasItem(ItemData item1, ItemData item2, int quantity1, int quantity2)
     {
         int totalQuantity1 = 0;
@@ -279,6 +279,20 @@ public class UIInventory : MonoBehaviour
 
         // item1과 item2가 각각 필요한 수량을 만족하는지 확인
         return (totalQuantity1 >= quantity1) && (totalQuantity2 >= quantity2);
+    }
+    */
+
+    public bool CanCraft(ItemData material1, ItemData material2, int material1Quatity, int material2Quatity)
+    {
+        ItemSlot slot1 = GetItemStack(material1);
+        ItemSlot slot2 = GetItemStack(material2);
+
+        if ((slot1.item == material1 && slot1.quantity >= material1Quatity) && (slot2.item == material2 && slot2.quantity >= material2Quatity))
+        {
+            return true;
+        }
+        return false;
+
     }
 
     public void CraftItem(ItemData craftedItem)
@@ -310,5 +324,36 @@ public class UIInventory : MonoBehaviour
 
         ThrowItem(craftedItem);
         CharacterManager.Instance.Player.itemData = null;
+    }
+
+    public void RemoveMaterialItem(ItemData material, int quantity)
+    {
+        ItemSlot slot = GetItemStack(material);
+        
+        slot.quantity -= quantity;
+
+        if (slot.quantity <= 0)
+        {
+            slot = null;
+            //selectedItemIndex = -1;
+            ClearMaterialItemWindow(material);
+        }
+        UpdateUI();
+    }
+
+    public void ClearMaterialItemWindow(ItemData material)
+    {
+        ItemSlot slot = GetItemStack(material);
+
+        slot.inventory.selectedItem = null;
+        slot.inventory.selectedItemName.text = string.Empty;
+        slot.inventory.selectedItemDescription.text = string.Empty;
+        slot.inventory.selectedItemStatName.text = string.Empty;
+        slot.inventory.selectedItemStatValue.text = string.Empty;
+
+        slot.inventory.useButton.SetActive(false);
+        slot.inventory.equipButton.SetActive(false);
+        slot.inventory.unEquipButton.SetActive(false);
+        slot.inventory.dropButton.SetActive(false);
     }
 }

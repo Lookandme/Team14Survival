@@ -119,15 +119,24 @@ public class ItemCraftTab : MonoBehaviour
             resultsQuantityArray.Add(resultAmount);
         }
     }
-
+    /*
     //재료가 있을 경우 버튼 활성화. 여기서는 초록색으로만 뜨게 하면 됨.
     public void ActiveButton()
     {
         buttonBg.color = inventory.HasItem(material1, material2, material1Quatity, material2Quatity) ? Color.green : originalColor;
     }
+    */
 
     public void OnClickButton()
     {
-        inventory.CraftItem(result);
+
+        if (inventory.CanCraft(material1, material2, material1Quatity, material2Quatity))
+        {
+            inventory.CraftItem(result);
+            inventory.RemoveMaterialItem(material1, material1Quatity);
+            inventory.RemoveMaterialItem(material2, material2Quatity);
+        }
+
     }
+
 }
